@@ -16,3 +16,6 @@ INSERT INTO holidays ( title, start_date, end_date) VALUES ('Weihnachtsferien', 
 INSERT INTO holidays ( title, start_date, end_date) VALUES ('Osterferien', '2023-04-11', '2023-04-15');
 INSERT INTO holidays ( title, start_date, end_date) VALUES ('Pfingstferien', '2023-05-30', '2023-06-09');
 INSERT INTO holidays ( title, start_date, end_date) VALUES ('Sommerferien', '2023-07-27', '2023-09-09');
+
+INSERT INTO holidays_vacations (holiday_id, vacations_id) VALUES (1,1);
+INSERT INTO holidays_vacations (holiday_id, vacations_id) VALUES (1,2);
