@@ -18,13 +18,16 @@ public class Vacation {
 	private long id;
 
 	@Size(min = 0, max = 50)
-	@Column(unique = true) private String title;
+	@Column(unique = true)
+	private String title;
 	
 	@Lob 
 	@Size(min = 0, max = 50)
-	@Column private String destination;
+	@Column
+	private String destination;
 	
-	@Column private String description;
+	@Column
+	private String description;
 
 
 	public Vacation() {

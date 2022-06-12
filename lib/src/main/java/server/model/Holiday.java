@@ -1,6 +1,6 @@
 package server.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +12,8 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Entity
 @Table(name = "holidays")
 public class Holiday {
@@ -21,19 +23,25 @@ public class Holiday {
 	private long id;
 
 	@Size(min = 0, max = 50)
-	@Column(unique = true) private String title;
+	@Schema(example = "Weihnachtsferien")
+	@Column(unique = true)
+	private String title;
 	
 	@DateTimeFormat
-	@Column private Date startDate;
+	@Schema(example = "2020-12-23")
+	@Column
+	private LocalDate startDate;
 	
 	@DateTimeFormat
-	@Column private Date endDate;
+	@Schema(example = "2021-01-09")
+	@Column
+	private LocalDate endDate;
 	
 	public Holiday () {
 		
 	}
 	
-	public Holiday(String title, Date startDate, Date endDate) {
+	public Holiday(String title, LocalDate startDate, LocalDate endDate) {
 		this.title = title;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -55,19 +63,19 @@ public class Holiday {
 		this.title = title;
 	}
 	
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate (Date startDate) {
+	public void setStartDate (LocalDate startDate) {
 		this.startDate = startDate;
 	}
 	
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate (Date endDate) {
+	public void setEndDate (LocalDate endDate) {
 		this.endDate = endDate;
 	}
 }

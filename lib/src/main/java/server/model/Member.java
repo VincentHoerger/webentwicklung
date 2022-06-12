@@ -1,6 +1,6 @@
 package server.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.validation.constraints.Size;
 
@@ -25,22 +25,26 @@ public class Member {
 	private long id;
 
 	@Size(min = 0, max = 50)
-	@Column(unique = true) private String username;
+	@Column(unique = true)
+	private String username;
 	
 	@Size(min = 0, max = 50)
-	@Column private String firstname;
+	@Column
+	private String firstname;
 
 	@Size(min = 0, max = 50)
-	@Column private String lastname;
+	@Column 
+	private String lastname;
 	
 	@DateTimeFormat
-	@Column private Date dateOfBirth;
+	@Column
+	private LocalDate dateOfBirth;
 	
 	public Member() {
 		
 	}
 
-	public Member(String username, String firstname, String lastname, Date dateOfBirth) {
+	public Member(String username, String firstname, String lastname, LocalDate dateOfBirth) {
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -79,11 +83,11 @@ public class Member {
 		this.lastname = lastname;
 	}
 
-	public Date getDateOfBirth() {
+	public LocalDate getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(LocalDate dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	
