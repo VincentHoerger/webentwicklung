@@ -111,6 +111,8 @@ public class Member {
 		return priorities;
 	}
 	
+	// Sollte eigentlich mit getReferenceById für Vacation funktionieren. Tut es aber nicht, keine Ahnung warum? Composite Key?
+	// Fehlermeldung NonUniqueObjectException: a different object with the same identifier value was already associated with the session VacationPriority
 	public void addPriority (Vacation vacation, int priority) {
 		VacationPriority vacationPriority = new VacationPriority(this, vacation, priority);
 		this.priorities.add(vacationPriority);

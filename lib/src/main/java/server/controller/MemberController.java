@@ -1,6 +1,7 @@
 package server.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -25,11 +26,12 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import server.exception.MemberNotFoundException;
 import server.exception.VacationNotFoundException;
+import server.exception.VacationPriorityNotFoundException;
+import server.exception.VacationPrioritySeeOtherException;
 import server.model.Member;
 import server.model.Vacation;
 import server.model.VacationPriority;
 import server.repository.MemberRepository;
-import server.repository.VacationPriorityRepository;
 import server.repository.VacationRepository;
 
 @RestController
@@ -43,19 +45,17 @@ public class MemberController {
 	@Autowired
 	private VacationRepository vacationRepository;
 	
-	@Autowired
-	private VacationPriorityRepository vacationPriorityRepository;
 
   
 	@GetMapping("/member/{id}")
-	public Optional<Member> findById(@PathVariable Long id) {
+	public Optional<Member> findById(@PathVariable long id) {
 		Optional<Member> member = memberRepository.findById(id);
 		member.orElseThrow(() -> new MemberNotFoundException(id));
 		return member;
 	}
 	
 	@GetMapping("/member/{id}/priorities")
-	public Set<VacationPriority> getVacationProperties(@PathVariable Long id) {
+	public Set<VacationPriority> getVacationProperties(@PathVariable long id) {
 		Optional<Member> _member = memberRepository.findById(id);
 		_member.orElseThrow(() -> new MemberNotFoundException(id));
 		return _member.get().getPriorities();
@@ -84,25 +84,20 @@ public class MemberController {
 	
 	@PostMapping("/member/{id}/priorities")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Member addVacationPriority(@PathVariable Long id, @Valid @NotBlank @RequestParam long vacationId, @Valid @NotBlank @RequestParam int priority) {
+	public Member addVacationPriority(@PathVariable long id, @Valid @NotBlank @RequestParam long vacationId, @Valid @NotBlank @RequestParam int priority) {
 		Optional<Member> _member = memberRepository.findById(id);
 		_member.orElseThrow(() -> new MemberNotFoundException(id));
 		Member member = _member.get();
 		
-		Optional<Vacation> _vacation = vacationRepository.findById(id);
-		_vacation.orElseThrow(() -> new VacationNotFoundException(id));
+		Optional<Vacation> _vacation = vacationRepository.findById(vacationId);
+		_vacation.orElseThrow(() -> new VacationNotFoundException(vacationId));
 		
-		//memberRepository.
-		//VacationPriority vacationPriority = VacationPriority(member,_vacation.get(),priority);
+		if(member.getPriorities().contains(new VacationPriority(member,_vacation.get(),0))) {
+			throw new VacationPrioritySeeOtherException(id,vacationId);
+		}
 		member.getPriorities().add(new VacationPriority(member,_vacation.get(),priority));
 		
-		//member.addPriority(_vacation.get(), priority);
-
-		//return member;
-		//return memberRepository.
 		return memberRepository.save(member);
-//		Member _member = repository.save(new Member(member.getUsername(),member.getFirstname(), member.getLastname(), member.getDateOfBirth()));
-//		return _member;
 	}
 	
 	@PutMapping("/member/{id}")
@@ -118,11 +113,49 @@ public class MemberController {
 		return memberRepository.save(_member);
 	}
 	
+	@PutMapping("/member/{id}/priorities/{vacationId}")
+	@ResponseStatus(HttpStatus.OK)
+	public Member updateVacationPriority(@PathVariable long id, @PathVariable long vacationId, @Valid @NotBlank @RequestParam int priority) {
+		Optional<Member> _member = memberRepository.findById(id);
+		_member.orElseThrow(() -> new MemberNotFoundException(id));
+		Member member = _member.get();
+		
+		Optional<Vacation> _vacation = vacationRepository.findById(vacationId);
+		_vacation.orElseThrow(() -> new VacationNotFoundException(vacationId));
+		
+		if(!member.getPriorities().contains(new VacationPriority(member,_vacation.get(),0))) {
+			throw new VacationPriorityNotFoundException(id,vacationId);
+		}
+		
+		member.getPriorities().remove(new VacationPriority(member,_vacation.get(),0));
+		member.getPriorities().add(new VacationPriority(member,_vacation.get(),priority));
+		
+		return memberRepository.save(member);
+	}
+	
 	@DeleteMapping("/member/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteMember(@PathVariable long id) {
 		Optional<Member> member = memberRepository.findById(id);
 		member.orElseThrow(() -> new MemberNotFoundException(id));
 		memberRepository.deleteById(id);
+	}
+	
+	@DeleteMapping("/member/{id}/priorities/{vacationId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteVacationPriority(@PathVariable long id, @PathVariable long vacationId) {
+		Optional<Member> _member = memberRepository.findById(id);
+		_member.orElseThrow(() -> new MemberNotFoundException(id));
+		Member member = _member.get();
+		
+		Optional<Vacation> _vacation = vacationRepository.findById(vacationId);
+		_vacation.orElseThrow(() -> new VacationNotFoundException(vacationId));
+		
+		if(!member.getPriorities().contains(new VacationPriority(member,_vacation.get(),0))) {
+			throw new VacationPriorityNotFoundException(id,vacationId);
+		}
+		
+		member.removePriority(vacationId);
+		memberRepository.save(member);
 	}
 }

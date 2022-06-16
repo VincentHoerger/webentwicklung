@@ -3,7 +3,7 @@ package server.exception;
 @SuppressWarnings("serial")
 public class MemberNotFoundException extends RuntimeException {
 
-	public MemberNotFoundException(Long id) {
+	public MemberNotFoundException(long id) {
 		super("Member not found with id " + id);
 	}
 	

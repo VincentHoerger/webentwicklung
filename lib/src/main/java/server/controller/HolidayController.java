@@ -37,7 +37,7 @@ public class HolidayController {
 	
 	@GetMapping("/holiday/{id}")
 	@Operation(summary = "Get Holiday", description = "Ruft die Holiday unter angegebener Id ab.")
-	public Optional<Holiday> findById(@PathVariable Long id) {
+	public Optional<Holiday> findById(@PathVariable long id) {
 		Optional<Holiday> holiday = holidayRepository.findById(id);
 		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
 		return holiday;

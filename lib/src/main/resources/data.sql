@@ -17,7 +17,7 @@ INSERT INTO vacations ( title, destination, description, holiday_id) VALUES ('Na
 INSERT INTO vacations ( title, destination, description, holiday_id) VALUES ('Radreise', 'Bodensee', 'Mehrtagestour mit tollen Übernachtungen',4);
 INSERT INTO vacations ( title, destination, description, holiday_id) VALUES ('Wanderurlaub', 'Alpen', 'Zwei Wochen Hügel rauf und runter',5);
 
-
+/*
 --INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,1,7);
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,2,6);
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,3,5);
@@ -25,6 +25,7 @@ INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,4,4
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,5,3);
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,6,2);
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (1,7,1);
+*/
 
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (2,1,4);
 INSERT INTO vacation_priorities (member_id, vacation_id, priority) VALUES (2,2,5);

@@ -33,4 +33,16 @@ public class GlobalControllerExceptionHandler {
 	public ResponseEntity<String> handleHolidayNotFound(RuntimeException ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(VacationPriorityNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ResponseEntity<String> handleVacationPriorityNotFound(RuntimeException ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(VacationPrioritySeeOtherException.class)
+	@ResponseStatus(HttpStatus.SEE_OTHER)
+	public ResponseEntity<String> handleVacationPrioritySeeOther(RuntimeException ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.SEE_OTHER);
+	}
 }
