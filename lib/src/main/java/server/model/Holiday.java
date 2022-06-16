@@ -1,20 +1,25 @@
 package server.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -41,8 +46,9 @@ public class Holiday {
 	@Column
 	private LocalDate endDate;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Vacation> vacations = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "holiday_id")
+	private Set<Vacation> vacations =  new HashSet<>();;
 	
 	public Holiday () {
 		
@@ -86,7 +92,7 @@ public class Holiday {
 		this.endDate = endDate;
 	}
 	
-	public List<Vacation> getVacations() {
+	public Set<Vacation> getVacations() {
 		return vacations;
 	}
 	
@@ -94,7 +100,7 @@ public class Holiday {
 		vacations.add(vacation);
 	}
 	
-	public void removeVacation (Vacation vacation) {
-		vacations.remove(vacation);
+	public void removeVacations () {
+		this.vacations.clear();
 	}
 }

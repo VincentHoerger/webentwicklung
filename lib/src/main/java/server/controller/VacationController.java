@@ -23,63 +23,88 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import server.exception.HolidayNotFoundException;
 import server.exception.VacationNotFoundException;
+import server.model.Holiday;
 import server.model.Vacation;
+import server.repository.HolidayRepository;
 import server.repository.VacationRepository;
 
 @RestController
-@RequestMapping("/api/vacation")
-@Tag(name = "Vacation", description = "Api für 'Vacation'")
+@RequestMapping(name="vacation",path="/api")
+@Tag(name = "vacation", description = "Api für 'Vacation'")
 public class VacationController {
 
 	@Autowired
-	private VacationRepository repository;
-  
-	@GetMapping("/{id}")
+	private VacationRepository vacationRepository;
+	
+	@Autowired
+	private HolidayRepository holidayRepository;
+	
+	@GetMapping("/vacation/{id}")
 	@Operation(summary = "Get Vacation", description = "Ruft die Vacation unter angegebener Id ab.")
 	public Optional<Vacation> findById(@PathVariable Long id) {
-		Optional<Vacation> vacation = repository.findById(id);
+		Optional<Vacation> vacation = vacationRepository.findById(id);
 		vacation.orElseThrow(() -> new VacationNotFoundException(id));
 		return vacation;
 	}
 	
-	@GetMapping("/")
-	public List<Vacation> findVacations() {
+	@GetMapping("/holiday/{id}/vacations")
+	@Tag(name = "holiday")
+	public List<Vacation> getAllVacationsByHolidayId(@PathVariable("id") long id) {    
+		Optional<Holiday> holiday = holidayRepository.findById(id);
+		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
+			
 		List<Vacation> vacations = new ArrayList<Vacation>();
-		repository.findAll().forEach(vacations::add);
-		return vacations;
+		
+	    vacations.addAll(holiday.get().getVacations());
+	    
+	    return vacations;
 	}
 	
-	@GetMapping("/findByTitle")
+	@GetMapping("/vacation/findByTitle")
 	public Optional<Vacation> findByTitle(@Valid @NotBlank @RequestParam String title) {
-		Optional<Vacation> vacation = repository.findByTitle(title);
+		Optional<Vacation> vacation = vacationRepository.findByTitle(title);
 		vacation.orElseThrow(() -> new VacationNotFoundException(title));
 		return vacation;
 	}
 	
-	@PostMapping("")
+	@PostMapping("/holiday/{id}/vacations")
+	@Tag(name = "holiday")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Vacation postVacation(@NotNull @Valid @RequestBody final Vacation vacation) {
-		Vacation _vacation = repository.save(new Vacation(vacation.getTitle(),vacation.getDestination(), vacation.getDescription()));
-		return _vacation;
+	public Vacation createVacation(@PathVariable("id") long id, @NotNull @Valid @RequestBody final Vacation vacation) {
+		Optional<Holiday> _holiday = holidayRepository.findById(id);
+		_holiday.orElseThrow(() -> new HolidayNotFoundException(id));
+		_holiday.get().getVacations().add(vacation);
+		return vacationRepository.save(vacation);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/vacation/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Vacation updatVacation(@PathVariable("id") long id, @RequestBody final Vacation vacation) {
-		Optional<Vacation> vacationData = repository.findById(id);
+		Optional<Vacation> vacationData = vacationRepository.findById(id);
 		vacationData.orElseThrow(() -> new VacationNotFoundException(id));
 		Vacation  _vacation = vacationData.get();
 		_vacation.setTitle(vacation.getTitle());
 		_vacation.setDestination(vacation.getDestination());
 		_vacation.setDescription(vacation.getDescription());
-		return repository.save(_vacation);
+		return vacationRepository.save(_vacation);
 	}
 	
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public long deleteVacation(@PathVariable long id) {
-		repository.deleteById(id);
-		return id;
+	@DeleteMapping("/vacation/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteVacation(@PathVariable long id) {
+		Optional<Vacation> vacation = vacationRepository.findById(id);
+		vacation.orElseThrow(() -> new VacationNotFoundException(id));
+		vacationRepository.deleteById(id);
+	}
+	
+	@DeleteMapping("/holiday/{id}/vacations")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteAllVacationsofHoliday(@PathVariable("id") long id) {
+		Optional<Holiday> _holiday = holidayRepository.findById(id);
+		_holiday.orElseThrow(() -> new HolidayNotFoundException(id));
+		_holiday.get().removeVacations();
+		holidayRepository.save(_holiday.get());
 	}
 }

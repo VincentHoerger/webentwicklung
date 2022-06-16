@@ -27,7 +27,7 @@ import server.model.Member;
 import server.repository.MemberRepository;
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping(name="member",path="/api")
 @Tag(name = "Member", description = "Api für 'Member'")
 public class MemberController {
 
@@ -35,35 +35,35 @@ public class MemberController {
 	private MemberRepository repository;
 
   
-	@GetMapping("/{id}")
+	@GetMapping("/member/{id}")
 	public Optional<Member> findById(@PathVariable Long id) {
 		Optional<Member> member = repository.findById(id);
 		member.orElseThrow(() -> new MemberNotFoundException(id));
 		return member;
 	}
 	
-	@GetMapping("/")
+	@GetMapping("/member/")
 	public List<Member> findMembers() {
 		List<Member> members = new ArrayList<Member>();
 		repository.findAll().forEach(members::add);
 		return members;
 	}
 	
-	@GetMapping("/findByUsername")
+	@GetMapping("/member/findByUsername")
 	public Optional<Member> findByTitle(@Valid @NotBlank @RequestParam String username) {
 		Optional<Member> member = repository.findByUsername(username);
 		member.orElseThrow(() -> new MemberNotFoundException(username));
 		return member;
 	}
 	
-	@PostMapping("")
+	@PostMapping("/member/")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Member postMember(@NotNull @Valid @RequestBody final Member member) {
 		Member _member = repository.save(new Member(member.getUsername(),member.getFirstname(), member.getLastname(), member.getDateOfBirth()));
 		return _member;
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/member/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Member updatMember(@PathVariable("id") long id, @RequestBody final Member member) {
 		Optional<Member> memberData = repository.findById(id);
@@ -76,10 +76,11 @@ public class MemberController {
 		return repository.save(_member);
 	}
 	
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public long deleteMember(@PathVariable long id) {
+	@DeleteMapping("/member/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteMember(@PathVariable long id) {
+		Optional<Member> member = repository.findById(id);
+		member.orElseThrow(() -> new MemberNotFoundException(id));
 		repository.deleteById(id);
-		return id;
 	}
 }
