@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import server.exception.HolidayNotFoundException;
 import server.model.Holiday;
+import server.model.Vacation;
 import server.repository.HolidayRepository;
 
 @RestController
@@ -41,6 +42,13 @@ public class HolidayController {
 		Optional<Holiday> holiday = holidayRepository.findById(id);
 		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
 		return holiday;
+	}
+	
+	@GetMapping("/holiday/{id}/vacations/highestpriority")
+	public Optional<Vacation> getHighestPriority(@PathVariable long id) {
+		Optional<Holiday> holiday = holidayRepository.findById(id);
+		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
+		return holiday.get().highestPriorityVacation();
 	}
 	
 	@GetMapping("/holiday")

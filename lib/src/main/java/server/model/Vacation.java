@@ -15,11 +15,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "vacations")
-public class Vacation {
+public class Vacation implements Comparable<Vacation>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +46,9 @@ public class Vacation {
         )
 	private Set<VacationPriority> vacationPriorities =  new HashSet<>();;
 
+	@Formula("(select sum(vp.priority) from vacation_priorities vp where vp.vacation_id = id group by vp.vacation_id)")
+	private int totalPriority;
+	
 	public Vacation() {
 		
 	}
@@ -92,6 +97,10 @@ public class Vacation {
 		return vacationPriorities;
 	}
 	
+	public int getPriority() {
+		return totalPriority;
+	}
+	
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,4 +113,9 @@ public class Vacation {
     public int hashCode() {
         return Objects.hash(title);
     }
+
+	@Override
+	public int compareTo(Vacation o) {
+		return Integer.compare(getPriority(), o.getPriority());
+	}
 }

@@ -1,7 +1,11 @@
 package server.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -99,5 +103,12 @@ public class Holiday {
 	
 	public void removeVacations () {
 		this.vacations.clear();
+	}
+	
+	public Optional<Vacation> highestPriorityVacation () {
+		List<Vacation> vacationsList = new ArrayList<>(vacations);
+		Collections.sort(vacationsList);
+		//TODO mehrere Vacations mit gleicher Priorität?
+		return Optional.ofNullable(vacationsList.get(0));
 	}
 }
