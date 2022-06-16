@@ -1,13 +1,25 @@
 package server.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "vacations")
@@ -29,6 +41,9 @@ public class Vacation {
 	@Column
 	private String description;
 
+//	@ManyToMany(mappedBy = "prioritizedVacations")
+//	//@JsonIgnore
+//	private Set<Member> prioritizedBy =  new HashSet<>();;
 
 	public Vacation() {
 		
@@ -72,4 +87,16 @@ public class Vacation {
 	public void setDescription (String description) {
 		this.description = description;
 	}
+	
+//	public Set<Member> getPrioritizers () {
+//		return prioritizedBy;
+//	}
+//	
+//	public void addPrioritizer (Member member) {
+//		this.prioritizedBy.add(member);
+//	}
+//	
+//	public void removePrioritizer (Member member) {
+//		this.prioritizedBy.remove(member);
+//	}
 }
