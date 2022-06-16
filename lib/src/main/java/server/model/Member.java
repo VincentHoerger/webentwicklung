@@ -117,23 +117,16 @@ public class Member {
 		vacation.getPrioritizers().add(vacationPriority);
 	}
 	
-	public void removePriority (Vacation vacation) {
+	public void removePriority (long vacationId) {
 		for (Iterator<VacationPriority> iterator = priorities.iterator(); iterator.hasNext(); ) {
 			VacationPriority vacationPriority = iterator.next();
-			if (vacationPriority.getMember().equals(this) && vacationPriority.getVacation().equals(vacation)) {
+			if (vacationPriority.getMember().equals(this) && vacationPriority.getVacation().getId() == vacationId) {
 				iterator.remove();
 				vacationPriority.getVacation().getPrioritizers().remove(vacationPriority);
 				vacationPriority.setMember(null);
 				vacationPriority.setVacation(null);
 			}
 		}
-	
-		//TODO vielleicht wieder auf vacationId umbauen
-//		Vacation vacation = this.vacationPriorities.stream().filter(v -> v.getId() == vacationId).findFirst().orElse(null);
-//		if  (vacation != null) {
-//			this.vacationPriorities.remove(vacation);
-//			vacation.getPrioritizers().remove(this);
-//		}
 	}
 	
     @Override
