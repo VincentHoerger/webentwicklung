@@ -18,9 +18,6 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
@@ -32,7 +29,7 @@ public class Holiday {
 	private long id;
 
 	@Size(min = 0, max = 50)
-	@Schema(example = "Weihnachtsferien")
+	@Schema(example = "Ferien")
 	@Column(unique = true)
 	private String title;
 	
