@@ -1,5 +1,6 @@
 package server.exception;
 
+import javax.validation.ConstraintViolationException;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,11 @@ public class GlobalControllerExceptionHandler {
 	@ResponseStatus(HttpStatus.SEE_OTHER)
 	public ResponseEntity<String> handleVacationPrioritySeeOther(RuntimeException ex) {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.SEE_OTHER);
+	}
+	
+	@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+	@ExceptionHandler(ConstraintViolationException.class)
+	ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+		return new ResponseEntity<>("Error while validating: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 }

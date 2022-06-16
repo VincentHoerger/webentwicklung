@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -31,6 +33,8 @@ public class VacationPriority {
     private Vacation vacation;
     
     @Column
+    @Min(1)
+    @Max(10)
     private int priority;
     
     public VacationPriority() {
