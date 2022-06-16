@@ -25,61 +25,72 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import server.exception.HolidayNotFoundException;
 import server.model.Holiday;
+import server.model.Vacation;
 import server.repository.HolidayRepository;
 
 @RestController
-@RequestMapping("/api/holiday")
-@Tag(name = "Holiday", description = "Api für 'Holiday'")
+@RequestMapping(name="holiday",path="/api")
+@Tag(name = "holiday", description = "Api für 'Holiday'")
 public class HolidayController {
 	
 	@Autowired
-	private HolidayRepository repository;
+	private HolidayRepository holidayRepository;
 	
-	@GetMapping("/{id}")
+	@GetMapping("/holiday/{id}")
 	@Operation(summary = "Get Holiday", description = "Ruft die Holiday unter angegebener Id ab.")
-	public Optional<Holiday> findById(@PathVariable Long id) {
-		Optional<Holiday> holiday = repository.findById(id);
+	public Optional<Holiday> findById(@PathVariable long id) {
+		Optional<Holiday> holiday = holidayRepository.findById(id);
 		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
 		return holiday;
 	}
 	
-	@GetMapping("/")
+	@GetMapping("/holiday/{id}/vacations/highestpriority")
+	public Optional<Vacation> getHighestPriority(@PathVariable long id) {
+		Optional<Holiday> holiday = holidayRepository.findById(id);
+		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
+		return holiday.get().highestPriorityVacation();
+	}
+	
+	@GetMapping("/holiday")
 	public List<Holiday> findHolidays() {
 		List<Holiday> holidays = new ArrayList<Holiday>();
-		repository.findAll().forEach(holidays::add);
+		holidayRepository.findAll().forEach(holidays::add);
 		return holidays;
 	}
 	
-	@GetMapping("/findByTitle")
+	@GetMapping("/holiday/findByTitle")
 	public Optional<Holiday> findByTitle(@Valid @NotBlank @RequestParam String title) {
-		Optional<Holiday> holiday = repository.findByTitle(title);
+		Optional<Holiday> holiday = holidayRepository.findByTitle(title);
 		holiday.orElseThrow(() -> new HolidayNotFoundException(title));
 		return holiday;
 	}
 	
-	@PostMapping("")
+	@PostMapping("/holiday")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Holiday postHoliday(@NotNull @Valid @RequestBody final Holiday holiday) {
-		Holiday _holiday = repository.save(new Holiday(holiday.getTitle(), holiday.getStartDate(),holiday.getEndDate()));
+		Holiday _holiday = holidayRepository.save(new Holiday(holiday.getTitle(), holiday.getStartDate(),holiday.getEndDate()));
 		return _holiday;
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/holiday/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Holiday updatHoliday(@PathVariable("id") long id, @RequestBody final Holiday holiday) {
-		Optional<Holiday> holidayData = repository.findById(id);
+		Optional<Holiday> holidayData = holidayRepository.findById(id);
 		holidayData.orElseThrow(() -> new HolidayNotFoundException(id));
 		Holiday  _holiday = holidayData.get();
 		_holiday.setTitle(holiday.getTitle());
 		_holiday.setStartDate(holiday.getStartDate());
 		_holiday.setEndDate(holiday.getEndDate());
-		return repository.save(_holiday);
+		// TODO save Ergebnis abwarten -> Unique index or primary key violation
+		return holidayRepository.save(_holiday);
 	}
 	
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	public long deleteHoliday(@PathVariable long id) {
-		repository.deleteById(id);
-		return id;
+	@DeleteMapping("/holiday/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteHoliday(@PathVariable long id) {
+		Optional<Holiday> holiday = holidayRepository.findById(id);
+		holiday.orElseThrow(() -> new HolidayNotFoundException(id));
+		holidayRepository.deleteById(id);
 	}
+	
 }

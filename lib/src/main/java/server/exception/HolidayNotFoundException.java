@@ -2,7 +2,7 @@ package server.exception;
 
 @SuppressWarnings("serial")
 public class HolidayNotFoundException extends RuntimeException{
-	public HolidayNotFoundException(Long id) {
+	public HolidayNotFoundException(long id) {
 		super("Holiday not found with id " + id);
 	}
 	

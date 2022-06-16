@@ -2,7 +2,7 @@ package server.exception;
 
 @SuppressWarnings("serial")
 public class VacationNotFoundException extends RuntimeException {
-	public VacationNotFoundException(Long id) {
+	public VacationNotFoundException(long id) {
 		super("Vacation not found with id " + id);
 	}
 	
