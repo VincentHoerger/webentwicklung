@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
 @Configuration
-
+//startet die App und konfiguriert OpenAPI sonst nichts.
 public class ServerApp {
 
 	public static void main(String[] args) {

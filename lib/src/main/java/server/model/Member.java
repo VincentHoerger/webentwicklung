@@ -54,7 +54,7 @@ public class Member {
 			cascade = CascadeType.ALL,
 			orphanRemoval = true
 			)
-	private Set<VacationPriority> priorities = new HashSet<>();;
+	private Set<VacationPriority> priorities = new HashSet<>();
 	
 	public Member() {
 		
@@ -111,7 +111,7 @@ public class Member {
 		return priorities;
 	}
 	
-	// Sollte eigentlich mit getReferenceById für Vacation funktionieren. Tut es aber nicht, keine Ahnung warum? Composite Key?
+	// Sollte eigentlich mit getReferenceById fï¿½r Vacation funktionieren. Tut es aber nicht, keine Ahnung warum? Composite Key?
 	// Fehlermeldung NonUniqueObjectException: a different object with the same identifier value was already associated with the session VacationPriority
 	public void addPriority (Vacation vacation, int priority) {
 		VacationPriority vacationPriority = new VacationPriority(this, vacation, priority);

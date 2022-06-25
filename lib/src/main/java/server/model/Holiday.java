@@ -49,7 +49,7 @@ public class Holiday {
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "holiday_id")
-	private Set<Vacation> vacations =  new HashSet<>();;
+	private Set<Vacation> vacations =  new HashSet<>();
 	
 	public Holiday () {
 		
@@ -107,8 +107,8 @@ public class Holiday {
 	
 	public Optional<Vacation> highestPriorityVacation () {
 		List<Vacation> vacationsList = new ArrayList<>(vacations);
-		Collections.sort(vacationsList);
-		//TODO mehrere Vacations mit gleicher Priorität?
+		Collections.sort(vacationsList,Collections.reverseOrder());
+		//TODO mehrere Vacations mit gleicher Prioritï¿½t?
 		return Optional.ofNullable(vacationsList.get(0));
 	}
 }

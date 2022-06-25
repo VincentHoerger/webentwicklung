@@ -31,11 +31,12 @@ public class Vacation implements Comparable<Vacation>{
 	@Column(unique = true)
 	private String title;
 	
-	@Lob 
+	 
 	@Size(min = 0, max = 50)
 	@Column
 	private String destination;
 	
+	@Lob
 	@Column
 	private String description;
 
@@ -44,7 +45,7 @@ public class Vacation implements Comparable<Vacation>{
             cascade = CascadeType.ALL,
             orphanRemoval = true
         )
-	private Set<VacationPriority> vacationPriorities =  new HashSet<>();;
+	private Set<VacationPriority> vacationPriorities =  new HashSet<>();
 
 	@Formula("(select sum(vp.priority) from vacation_priorities vp where vp.vacation_id = id group by vp.vacation_id)")
 	private int totalPriority;
