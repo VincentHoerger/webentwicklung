@@ -30,6 +30,7 @@ public class Holiday {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	private long id;
 
 	@Size(min = 0, max = 50)

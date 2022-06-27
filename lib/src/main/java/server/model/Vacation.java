@@ -19,12 +19,15 @@ import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Entity
 @Table(name = "vacations")
 public class Vacation implements Comparable<Vacation>{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	private long id;
 
 	@Size(min = 0, max = 50)
@@ -47,6 +50,7 @@ public class Vacation implements Comparable<Vacation>{
         )
 	private Set<VacationPriority> vacationPriorities =  new HashSet<>();
 
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	@Formula("(select sum(vp.priority) from vacation_priorities vp where vp.vacation_id = id group by vp.vacation_id)")
 	private int totalPriority;
 	
