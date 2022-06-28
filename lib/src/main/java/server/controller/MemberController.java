@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,8 +35,9 @@ import server.repository.MemberRepository;
 import server.repository.VacationRepository;
 
 @RestController
+@CrossOrigin
 @RequestMapping(name="member",path="/api")
-@Tag(name = "Member", description = "Api für 'Member'")
+@Tag(name = "Member", description = "Api fï¿½r 'Member'")
 public class MemberController {
 
 	@Autowired
