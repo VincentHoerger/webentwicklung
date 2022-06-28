@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urlaubsplaner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="ajaxfunctions.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<main>
+    <div class="header">
+            <div class="col-auto"><h1 class="display-1">Urlaubsplaner</h1></div>
+        </div>
+
+    <div id="container" class="container">
+        
+        <select name="username-dropdown" id="username-dropdown"></select>
+        <button class="btn btn-outline-danger btn-rounded btn-block my-4 waves-effect z-depth-0" id="delete-user-button">Nutzer löschen</button>
+
+        <div class="row mt-3">
+            <div class="col">
+                <div class="familienmitglied-anlegen">
+                    <h2>Familienmitglied Anlegen</h2>
+                    <form id="new-member"></form>
+                    <label>Username:</label>
+                    <input type="text" name="username" required="required">
+                    <br>
+                    <label>Geburtsdatum:</label>
+                    <input type="date" name="dateOfBirth" required="required">
+                    <br>
+                    <label>Vorname</label>
+                    <input type="text" name="firstname" required="required">
+                    <br>
+                    <label>Nachname</label>
+                    <input type="text" name="lastname" required="required">
+                    <br>
+                    
+                    <button class="btn btn-outline-dark btn-rounded btn-block my-4 waves-effect z-depth-0" id="new-member-button">Anlegen</button>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="uebersicht">
+                    <h2>Übersicht</h2>
+                    <br>
+                    <div class="holiday-anlegen">
+                        <button class="btn btn-outline-dark btn-rounded btn-block waves-effect z-depth-0" type="button" data-bs-toggle="modal" data-bs-target="#createHolidayModal">Urlaub hinzufügen</button>
+                    </div>
+                    <button class="btn btn-outline-dark btn-rounded btn-block my-4 waves-effect z-depth-0" id="load-holidays">Laden</button>
+                    <table class="table table-hover" id="holiday-table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th class="px-5">Titel</th>
+                            <th class="px-5">Startdatum</th>
+                            <th class="px-5">Enddatum</th>
+                            <th class="px-5">id</th>
+                        </tr>
+                        </thead>
+                        <tbody id="holiday-table-body">
+                        <tr>
+                            <td></td>
+                            <td class="px-5">title</td>
+                            <td class="px-5">startDate</th>
+                            <td class="px-5">endDate</td>
+                            <td class="px-5" style="display:none;">id</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            
+        </div>
+
+
+    </div>
+
+
+    <div class="modal" id="createHolidayModal" tabindex="-10">
+        <div class="modal-dialog">
+        </div>
+        
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Urlaub Anlegen</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h2>Zeitraum Anlegen</h2>
+                <form id="new-holiday"></form>
+                <label>Titel:</label>
+                <input type="text" name="title" required="required">
+                <br>
+                <label>Startdatum:</label>
+                <input type="date" name="startDate" required="required">
+                <br>
+                <label>Enddatum:</label>
+                <input type="date" name="endDate" required="required">
+                <br>
+                <h2>Urlaubsvorschlag</h2>
+
+                <div id="vacation1" class="vacation">
+                    <label>Titel</label>
+                    <input type="text" name="vacation-title" required="required">
+                    <br>
+                    <label>Beschreibung</label>
+                    <input type="text" name="vacation-description" required="required">
+                    <br>
+                    <label>Destination</label>
+                    <input type="text" name="vacation-destination" required="required">
+                    <br>
+                    <hr>
+                </div> 
+            </div>
+                 <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="add-vacation-table">Vorschlag hinzufügen</button>
+                <button type="button" class="btn btn-primary" id="submit-holiday">Zeitraum erstellen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+        <div class="modal" id="holidayModal" tabindex="-10">
+            <div class="modal-dialog">
+                <div class="modal-dialog ">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Urlaub Anlegen</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+            <div class="modal-body">
+                <h2>Zeitraum Anlegen</h2>
+                <form id="new-holiday"></form>
+                <label>Titel:</label>
+                <input type="text" name="title" id="holidayTitle" required="required" class="form-control" >
+                <br>
+                <label>Startdatum:</label>
+                <input type="date" name="startDate" id="holidayStartDate" required="required" class="form-control" >
+                <br>
+                <label>Enddatum:</label>
+                <input type="date" name="endDate" id="holidayEndDate" required="required" class="form-control" >
+                <br>
+                <input type="hidden" id="holidayId" />
+                <h2>Urlaubsvorschlag</h2>
+
+
+                <table class="table mt-2" id="vacation-table">
+                    <thead>
+                    <tr>
+                        <th class="px-5">id</th>
+                        <th class="px-5">Titel</th>
+                        <th class="px-5">Startdatum</th>
+                        <th class="px-5">Enddatum</th>
+                        <th class="px-5">Priorität</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="vacation-table-body">
+                    <tr>
+                        <td class="px-5"></td>
+                        <td class="px-5"></td>
+                        <td class="px-5"></td>
+                        <td class="px-5"></td>
+                        <td class="px-5"></td>
+                    </tr>
+                    </tbody>
+                </table>
+    
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Schließen</button>
+              <button type="button" class="btn btn-secondary" id="add-vacation" onclick="addVacation();">Vorschlag hinzufügen</button>
+              <button type="button" class="btn btn-danger" id="delete-holiday"  onclick="deleteHoliday();">Urlaub löschen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      
+      
+                        <div class="modal" id="vacationModal" tabindex="-20">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <input type="text" class="modal-title form-control" id="vacationTitle" />
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="vacationBody">
+                <input type="text" name="description" id="vacationDescription" class="form-control" />
+                <input type="text" name="destination" id="vacationDestination" class="form-control" />
+                <p>Priorität:</p>
+                <input type="number" name="priority" id="vacationPriority" class="form-control" min="1" max="10"/>
+                <input type="hidden" id="vacationId" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="addPriority();">Priorität hinzufügen</button>
+              <button type="button" class="btn btn-primary" onclick="postVacation();">Vorschlag hinzufügen</button>
+            </div>
+          </div>
+        </div>
+                        </div>
+      
+
+</main>
+</body>
+
+</html>

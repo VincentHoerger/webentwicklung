@@ -1,0 +1,55 @@
+body {
+    background: #136a8a;  
+    background: -webkit-linear-gradient(to right, #267871, #136a8a);  
+    background: linear-gradient(to right, #267871, #136a8a); 
+    padding-bottom: 60px;
+}
+.header {
+    padding: 40px;
+    text-align: center;
+    background: rgba(15, 56, 63,0.5);
+    color: white;
+    font-size: 30px;
+}   
+h1 {
+    text-shadow: 5px 5px #000000;
+}
+
+.container{
+    margin:20px;
+
+}
+.modal-dialog{
+    position: relative;
+    display: table; 
+    overflow-y: auto;    
+    overflow-x: auto;
+    width: auto;
+    min-width: 300px;   
+}
+
+.modal-header{
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 3.5px );
+    -webkit-backdrop-filter: blur( 3.5px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+.col{
+    padding:25px;
+    background: rgba( 255, 255, 255, 0.5 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 3.5px );
+    -webkit-backdrop-filter: blur( 3.5px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    margin: 25px; 
+    text-align: center;
+    transition: transform .2s;
+}
+.col:hover{
+    transform: scale(1.05);
+    backface-visibility: hidden;
+}
+
